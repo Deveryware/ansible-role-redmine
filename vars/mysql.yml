@@ -1,0 +1,12 @@
+---
+redmine_packages:
+- redmine
+- redmine-mysql
+- libmysqlclient-dev
+
+redmine_db_adapter: 'mysql2'
+redmine_db_database: 'redmine'
+redmine_db_host: 'localhost'
+redmine_db_port: 3306
+redmine_db_username: 'redmine'
+redmine_db_password: 'redmine'

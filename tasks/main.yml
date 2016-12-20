@@ -1,0 +1,61 @@
+---
+- name: Ensure redmine group is present.
+  group: name="{{ redmine_group }}" state=present
+
+- name: Ensure redmine user is present.
+  user:
+    name: "{{ redmine_user }}"
+    group: "{{ redmine_group }}"
+    home: "{{ redmine_home }}"
+    state: present
+
+- include_vars: "{{ redmine_sgbd }}.yml"
+
+- name: Ensure packages are installed.
+  apt: package="{{ item }}" state=installed
+  with_items: redmine_packages
+
+- name: Ensure redmine ownership.
+  file:
+    path: "{{ item }}"
+    owner: "{{ redmine_user }}"
+    group: "{{ redmine_group }}"
+    recurse: yes
+  with_items:
+  - '/usr/share/redmine'
+  - '/etc/redmine'
+
+- name: Ensure bundler is installed.
+  gem: name="bundler" state=present user_install=yes
+  become_user: "{{ redmine_user }}"
+
+- name: Ensure bundled gems are installed.
+  bundler: state=present chdir="{{ redmine_home }}"
+  become_user: "{{ redmine_user }}"
+
+- name: Ensure required gems are installed.
+  gem: name="activerecord-mysql2-adapter" state=present user_install=yes
+  become_user: "{{ redmine_user }}"
+
+- name: Generate secret token
+  become: yes
+  become_user: "{{ redmine_user }}"
+  shell: "/usr/bin/bundle exec /usr/bin/rake generate_secret_token"
+  args:
+    chdir: "{{ redmine_home }}"
+
+- name: DB Migrate
+  shell: RAILS_ENV=production /usr/bin/bundle  exec /usr/bin/rake db:migrate
+  become: yes
+  become_user: "{{ redmine_user }}"
+  args:
+    chdir: "{{ redmine_home }}"
+
+- name: Default data
+  shell: RAILS_ENV=production REDMINE_LANG=en /usr/bin/bundle exec /usr/bin/rake redmine:load_default_data
+  become: yes
+  become_user: "{{ redmine_user }}"
+  args:
+    chdir: "{{ redmine_home }}"
+
+- include: "{{ redmine_sgbd }}.yml"

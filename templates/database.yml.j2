@@ -1,0 +1,11 @@
+#
+production:
+  adapter: "{{ redmine_db_adapter }}"
+  database: "{{ redmine_db_database }}"
+{% if redmine_sgbd != 'sqlite' %}
+  host: "{{ redmine_db_host }}"
+  port: "{{ redmine_db_port }}"
+  username: "{{ redmine_db_username}}"
+  password: "{{ redmine_db_password }}"
+{% endif %}
+  encoding: utf8

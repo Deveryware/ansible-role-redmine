@@ -1,0 +1,20 @@
+---
+- name: Mysql - Ensure database.yml is set.
+  template:
+    src: database.yml.j2
+    dest: '/etc/redmine/default/database.yml'
+
+- name: Mysql - Ensure database is created.
+  mysql_db:
+    name: "{{ redmine_db_database }}"
+    encoding: utf8
+    collation: utf8_general_ci
+    state: present
+  register: db_created
+
+- name: Mysql - Ensure redmine db user is present.
+  mysql_user:
+    name: "{{ redmine_db_username }}"
+    password: "{{ redmine_db_password }}"
+    priv: "{{ redmine_db_username }}.*:ALL"
+    state: present
