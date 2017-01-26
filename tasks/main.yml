@@ -10,52 +10,38 @@
     state: present
 
 - include_vars: "{{ redmine_sgbd }}.yml"
+  no_log: True
+
+- include: "{{ redmine_sgbd }}.yml"
+  when: redmine_sgbd != 'sqlite3'
 
 - name: Ensure packages are installed.
   apt: package="{{ item }}" state=installed
   with_items: redmine_packages
 
-- name: Ensure redmine ownership.
-  file:
-    path: "{{ item }}"
-    owner: "{{ redmine_user }}"
-    group: "{{ redmine_group }}"
-    recurse: yes
+- name: Ensure debconf is redmine ready.
+  debconf:
+    name: redmine
+    question: "{{ item.question }}"
+    value: "{{ item.value}}"
+    vtype: "{{ item.vtype }}"
   with_items:
-  - '/usr/share/redmine'
-  - '/etc/redmine'
+  - { question: 'redmine/instances/default/dbconfig-install', value: 'true', vtype: 'boolean' }
+  - { question: 'redmine/instances/default/database-type', value: "{{ redmine_sgbd }}", vtype: 'select' }
+  - { question: 'redmine/instances/default/remote/host', value: "{{ redmine_db_host }}" , vtype: 'string' }
+  - { question: 'redmine/instances/default/remote/port', value: "{{ redmine_db_port }}" , vtype: 'string' }
+  - { question: 'redmine/instances/default/db/dbname', value: "{{ redmine_db_database }}", vtype: 'string' }
+  - { question: "redmine/instances/default/db/app-user", value: "{{ redmine_db_username }}", vtype: 'string' }
+  - { question: "redmine/instances/default/{{ redmine_sgbd }}/app-pass", value: "{{ redmine_db_password }}", vtype: 'password' }
+  - { question: "redmine/instances/default/{{ redmine_sgbd }}/admin-user", value: "{{ redmine_db_admin_user }}", vtype: 'string' }
+  - { question: "redmine/instances/default/{{ redmine_sgbd }}/admin-pass", value: "{{ redmine_db_admin_password }}", vtype: 'password' }
+  - { question: "redmine/instances/default/{{ redmine_sgbd }}/method", value: 'tcp/ip', vtype: 'select' }
 
-- name: Ensure bundler is installed.
-  gem: name="bundler" state=present user_install=yes
-  become_user: "{{ redmine_user }}"
+- name: stat /var/cache/debconf/config.dat.
+  stat:
+    path: '/var/cache/debconf/config.dat'
+  register: config_dat
 
-- name: Ensure bundled gems are installed.
-  bundler: state=present chdir="{{ redmine_home }}"
-  become_user: "{{ redmine_user }}"
-
-- name: Ensure required gems are installed.
-  gem: name="activerecord-mysql2-adapter" state=present user_install=yes
-  become_user: "{{ redmine_user }}"
-
-- name: Generate secret token
-  become: yes
-  become_user: "{{ redmine_user }}"
-  shell: "/usr/bin/bundle exec /usr/bin/rake generate_secret_token"
-  args:
-    chdir: "{{ redmine_home }}"
-
-- name: DB Migrate
-  shell: RAILS_ENV=production /usr/bin/bundle  exec /usr/bin/rake db:migrate
-  become: yes
-  become_user: "{{ redmine_user }}"
-  args:
-    chdir: "{{ redmine_home }}"
-
-- name: Default data
-  shell: RAILS_ENV=production REDMINE_LANG=en /usr/bin/bundle exec /usr/bin/rake redmine:load_default_data
-  become: yes
-  become_user: "{{ redmine_user }}"
-  args:
-    chdir: "{{ redmine_home }}"
-
-- include: "{{ redmine_sgbd }}.yml"
+- name: reconfigure redmine
+  command: dpkg-reconfigure -f noninteractive redmine
+  when: config_dat.changed

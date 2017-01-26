@@ -1,9 +1,4 @@
 ---
-- name: Mysql - Ensure database.yml is set.
-  template:
-    src: database.yml.j2
-    dest: '/etc/redmine/default/database.yml'
-
 - name: Mysql - Ensure database is created.
   mysql_db:
     name: "{{ redmine_db_database }}"

@@ -3,4 +3,4 @@ redmine_group: 'redmine'
 redmine_user: 'redmine'
 redmine_home: '/usr/share/redmine'
 
-redmine_sgbd: sqlite
+redmine_sgbd: sqlite3

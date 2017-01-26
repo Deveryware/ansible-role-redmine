@@ -10,3 +10,6 @@ redmine_db_host: 'localhost'
 redmine_db_port: 3306
 redmine_db_username: 'redmine'
 redmine_db_password: 'redmine'
+
+redmine_db_admin_user: 'root'
+redmine_db_admin_password: 'root'
