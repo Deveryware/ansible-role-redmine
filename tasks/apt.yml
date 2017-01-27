@@ -1,0 +1,31 @@
+---
+- name: Ensure packages are installed.
+  apt: package="{{ item }}" state=installed
+  with_items: redmine_apt_packages
+
+- name: Ensure debconf is redmine ready.
+  debconf:
+    name: redmine
+    question: "{{ item.question }}"
+    value: "{{ item.value}}"
+    vtype: "{{ item.vtype }}"
+  with_items:
+  - { question: 'redmine/instances/default/dbconfig-install', value: 'true', vtype: 'boolean' }
+  - { question: 'redmine/instances/default/database-type', value: "{{ redmine_sgbd }}", vtype: 'select' }
+  - { question: 'redmine/instances/default/remote/host', value: "{{ redmine_db_host }}" , vtype: 'string' }
+  - { question: 'redmine/instances/default/remote/port', value: "{{ redmine_db_port }}" , vtype: 'string' }
+  - { question: 'redmine/instances/default/db/dbname', value: "{{ redmine_db_database }}", vtype: 'string' }
+  - { question: "redmine/instances/default/db/app-user", value: "{{ redmine_db_username }}", vtype: 'string' }
+  - { question: "redmine/instances/default/{{ redmine_sgbd }}/app-pass", value: "{{ redmine_db_password }}", vtype: 'password' }
+  - { question: "redmine/instances/default/{{ redmine_sgbd }}/admin-user", value: "{{ redmine_db_admin_user }}", vtype: 'string' }
+  - { question: "redmine/instances/default/{{ redmine_sgbd }}/admin-pass", value: "{{ redmine_db_admin_password }}", vtype: 'password' }
+  - { question: "redmine/instances/default/{{ redmine_sgbd }}/method", value: 'tcp/ip', vtype: 'select' }
+
+- name: stat /var/cache/debconf/config.dat.
+  stat:
+    path: '/var/cache/debconf/config.dat'
+  register: config_dat
+
+- name: reconfigure redmine
+  command: dpkg-reconfigure -f noninteractive redmine
+  when: config_dat.changed

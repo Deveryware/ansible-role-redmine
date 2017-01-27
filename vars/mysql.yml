@@ -1,8 +1,14 @@
 ---
-redmine_packages:
+redmine_apt_packages:
 - redmine
 - redmine-mysql
 - libmysqlclient-dev
+
+redmine_git_packages:
+- git
+- libmysqlclient-dev
+- libmagickcore-dev
+- libmagickwand-dev
 
 redmine_db_adapter: 'mysql2'
 redmine_db_database: 'redmine'
