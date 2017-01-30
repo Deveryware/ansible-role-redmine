@@ -1,0 +1,16 @@
+---
+- name: Apache2-passenger - Ensure sites-available is ready.
+  copy:
+    src: 'apache2-passenger-host.conf'
+    dest: '/etc/apache2/sites-available/redmine.conf'
+  register: redmine_apache_sites_available
+
+- name: Apache2-passenger - Ensure sites-enabled is ready.
+  file:
+    dest: '/etc/apache2/sites-enabled/redmine.conf'
+    src: '/etc/apache2/sites-available/redmine.conf'
+    state: link
+
+- name: Apache2-passenger - Reload apache2 if needed.
+  service: name=apache2 state=reloaded
+  when: redmine_apache_sites_available.changed

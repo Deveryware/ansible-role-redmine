@@ -1,7 +1,13 @@
 ---
-redmine_packages:
+redmine_apt_packages:
 - redmine
 - redmine-sqlite
+
+redmine_git_packages:
+- git
+- ruby-dev
+- libmagickcore-dev
+- libmagickwand-dev
 
 redmine_db_adapter: 'sqlite3'
 redmine_db_database: '/var/lib/dbconfig-common/sqlite3/redmine/instances/default/redmine_default'
