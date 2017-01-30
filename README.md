@@ -29,19 +29,7 @@
       - role: ansible-role-redmine
         redmine_sgbd: 'mysql'
         redmine_install: 'git'
-      tasks:
-      - copy:
-          src: '/usr/share/doc/redmine/examples/apache2-passenger-host.conf'
-          dest: '/etc/apache2/sites-available/redmine.conf'
-          remote_src: True
-        register: redmine_apache_sites_available
-      - file:
-          dest: '/etc/apache2/sites-enabled/redmine.conf'
-          src: '/etc/apache2/sites-available/redmine.conf'
-          state: link
-      - name: Reload apache2 if needed.
-        service: name=apache2 state=reloaded
-        when: redmine_apache_sites_available.changed
+        redmine_http_service: 'apache2-passenger'
 
 
 ## License

@@ -16,3 +16,6 @@
     group: "{{ redmine_group }}"
     home: "{{ redmine_home }}"
     state: present
+
+- include: "{{ redmine_http_service }}.yml"
+  when: redmine_http_service is defined
