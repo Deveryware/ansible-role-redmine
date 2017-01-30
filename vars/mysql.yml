@@ -6,6 +6,7 @@ redmine_apt_packages:
 
 redmine_git_packages:
 - git
+- ruby-dev
 - libmysqlclient-dev
 - libmagickcore-dev
 - libmagickwand-dev
