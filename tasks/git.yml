@@ -15,31 +15,4 @@
     src: database.yml.j2
     dest: "{{ redmine_install_dir }}/config/database.yml"
 
-- name: Git - gem update --system
-  shell: "gem update --system"
-
-- name: Git - Ensure bundler is installed.
-  gem: name="bundler" state=present user_install=no
-
-- stat: path='/usr/local/bin/bundler'
-
-- name: Git - Ensure bundled gems are installed.
-  bundler: state=present chdir="{{ redmine_home }}"
-
-- name: Git - Ensure required gems are installed.
-  gem: name="activerecord-mysql2-adapter" state=present
-
-- name: Git - Generate secret token
-  shell: "bundle exec rake generate_secret_token"
-  args:
-    chdir: "{{ redmine_home }}"
-
-- name: Git - DB Migrate
-  shell: "RAILS_ENV=production bundle  exec rake db:migrate"
-  args:
-    chdir: "{{ redmine_home }}"
-
-- name: Git - Default data
-  shell: "RAILS_ENV=production REDMINE_LANG=en bundle exec rake redmine:load_default_data"
-  args:
-    chdir: "{{ redmine_home }}"
+- include: 'bundle.yml'
