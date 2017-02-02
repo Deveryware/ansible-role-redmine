@@ -1,6 +1,9 @@
 # The passenger module (from the libapache2-mod-passenger package) must be
 # enabled
 <VirtualHost *:80>
+{% if redmine_servername is defined %}
+    ServerName {{ redmine_servername }}
+{% endif %}
     # ServerName my.domain.name
     # this is the passenger config
     RailsEnv production
@@ -10,6 +13,13 @@
     PassengerDefaultUser www-data
     Alias "/plugin_assets/" /var/cache/redmine/default/plugin_assets/
     DocumentRoot /usr/share/redmine/public
+{% if redmine_sub_uri is defined %}
+    Alias "{{ redmine_sub_uri }}" /usr/share/redmine/public
+    <Location {{ redmine_sub_uri }}>
+        PassengerBaseURI {{ redmine_sub_uri }}
+        PassengerAppRoot /usr/share/redmine
+    </Location>
+{% endif %}
     <Directory "/usr/share/redmine/public">
         Allow from all
         Options -MultiViews

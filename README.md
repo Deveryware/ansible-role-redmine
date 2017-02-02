@@ -30,7 +30,7 @@
         redmine_sgbd: 'mysql'
         redmine_install: 'git'
         redmine_http_service: 'apache2-passenger'
-
+        redmine_sub_uri: '/redmine'
 
 ## License
 

@@ -1,7 +1,7 @@
 ---
 - name: Apache2-passenger - Ensure sites-available is ready.
-  copy:
-    src: 'apache2-passenger-host.conf'
+  template:
+    src: 'apache2-passenger-host.conf.j2'
     dest: '/etc/apache2/sites-available/redmine.conf'
   register: redmine_apache_sites_available
 
