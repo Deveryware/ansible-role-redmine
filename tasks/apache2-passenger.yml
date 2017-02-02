@@ -14,3 +14,10 @@
 - name: Apache2-passenger - Reload apache2 if needed.
   service: name=apache2 state=reloaded
   when: redmine_apache_sites_available.changed
+
+- name: Apache2-passenger - Retrieve redmine group members.
+  getent: database=group key="{{ redmine_group }}"
+
+- name: Apache2-passenger - Ensure webserver user is in the redmine group.
+  user: name="{{ redmine_webserver_user }}" groups="{{ redmine_group }}"
+  when: not redmine_webserver_user in getent_group['{{ redmine_group }}'][2]

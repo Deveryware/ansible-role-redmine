@@ -22,3 +22,19 @@
 
 - name: Ensure log directory is linked.
   file: src="/usr/share/redmine/log" dest="/var/log/redmine" state=link
+
+- name: Ensure directories are writable by the group.
+  file:
+    path: "/usr/share/redmine/{{ item }}"
+    state: directory
+    mode: g=rwX
+  with_items:
+  - 'log'
+  - 'tmp'
+  - 'tmp/cache'
+
+- name: Ensure redmine group is owner.
+  file:
+    path: "{{ redmine_home }}"
+    group: "{{ redmine_group }}"
+    recurse: yes
