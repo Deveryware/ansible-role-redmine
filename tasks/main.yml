@@ -19,3 +19,6 @@
 
 - include: "{{ redmine_http_service }}.yml"
   when: redmine_http_service is defined
+
+- name: Ensure log directory is linked.
+  file: src="/usr/share/redmine/log" dest="/var/log/redmine" state=link
