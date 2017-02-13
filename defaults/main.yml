@@ -9,3 +9,8 @@ redmine_git_repo: 'https://github.com/redmine/redmine.git'
 redmine_git_version: 'HEAD'
 redmine_install_dir: '/usr/share/redmine'
 redmine_webserver_user: 'www-data'
+redmine_writable_dirs:
+- 'log'
+- 'tmp'
+- 'files'
+- 'public/plugin_assets'
