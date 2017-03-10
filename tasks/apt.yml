@@ -1,7 +1,7 @@
 ---
 - name: Ensure packages are installed.
   apt: package="{{ item }}" state=installed
-  with_items: redmine_apt_packages
+  with_items: "{{ redmine_apt_packages }}"
 
 - name: Ensure debconf is redmine ready.
   debconf:

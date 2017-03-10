@@ -1,7 +1,7 @@
 ---
 - name: Git - Ensure prerequisites packages are installed.
   apt: package="{{ item }}" state=installed
-  with_items: redmine_git_packages
+  with_items: "{{ redmine_git_packages }}"
 
 - name: Git - Clone repository.
   git:
