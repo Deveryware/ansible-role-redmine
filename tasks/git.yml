@@ -8,6 +8,7 @@
     repo: "{{ redmine_git_repo }}"
     dest: "{{ redmine_install_dir }}"
     version: "{{ redmine_git_version }}"
+    force: yes
     accept_hostkey: yes
 
 - name: Git - Ensure database.yml is set.
