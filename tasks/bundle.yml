@@ -21,20 +21,13 @@
   args:
     chdir: "{{ redmine_home }}"
 
-- name: Bundle - DB Migrate
-  shell: "RAILS_ENV=production bundle  exec rake db:migrate"
+- name: Bundle - Migrate database
+  shell: "RAILS_ENV=production bundle exec rake db:migrate"
   args:
     chdir: "{{ redmine_home }}"
-  when: redmine_update is defined and not redmine_update
 
 - name: Bundle - Default data
   shell: "RAILS_ENV=production REDMINE_LANG=en bundle exec rake redmine:load_default_data"
   args:
     chdir: "{{ redmine_home }}"
-  when: redmine_update is defined and not redmine_update
-
-- name: Bundle - Migrate database
-  shell: "bundle exec rake db:migrate RAILS_ENV=production"
-  args:
-    chdir: "{{ redmine_home }}"
-  when: redmine_update is defined and redmine_update
+  when: redmine_load_default_data is defined and redmine_load_default_data
