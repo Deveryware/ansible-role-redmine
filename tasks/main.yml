@@ -8,7 +8,9 @@
 - include: "{{ redmine_install }}.yml"
 
 - name: Ensure redmine group is present.
-  group: name="{{ redmine_group }}" state=present
+  group:
+    name: "{{ redmine_group }}"
+    state: present
 
 - name: Ensure redmine user is present.
   user:
@@ -21,7 +23,10 @@
   when: redmine_http_service is defined
 
 - name: Ensure log directory is linked.
-  file: src="/usr/share/redmine/log" dest="/var/log/redmine" state=link
+  file:
+    src: "/usr/share/redmine/log"
+    dest: "/var/log/redmine"
+    state: link
 
 - name: Ensure directories are writable by the group.
   file:

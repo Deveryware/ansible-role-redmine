@@ -3,7 +3,10 @@
   shell: "gem update --system"
 
 - name: Bundle - Ensure bundler is installed.
-  gem: name="bundler" state=present user_install=no
+  gem:
+    name: "bundler"
+    state: present
+    user_install: no
 
 - name: Bundle - Ensure bundler is updated.
   shell: "bundle update"
@@ -11,10 +14,15 @@
     chdir: "{{ redmine_home }}"
 
 - name: Bundle - Ensure bundled gems are installed.
-  bundler: state=present chdir="{{ redmine_home }}"
+  bundler:
+    state: present
+  args:
+    chdir: "{{ redmine_home }}"
 
 - name: Bundle - Ensure required gems are installed.
-  gem: name="activerecord-mysql2-adapter" state=present
+  gem:
+    name: "activerecord-mysql2-adapter"
+    state: present
 
 - name: Bundle - Generate secret token
   shell: "bundle exec rake generate_secret_token"
