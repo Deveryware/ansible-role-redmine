@@ -31,3 +31,10 @@
 - name: reconfigure redmine
   command: dpkg-reconfigure -f noninteractive redmine
   when: config_dat.changed
+
+- name: Ensure redmine ownership.
+  file:
+    path: "{{ redmine_install_dir }}"
+    owner: "{{ redmine_user }}"
+    group: "{{ redmine_group }}"
+    recurse: yes
