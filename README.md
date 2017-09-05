@@ -10,6 +10,7 @@
     $> cat requirements.yml
     ---
     - src: https://github.com/geerlingguy/ansible-role-apache
+    - src: https://github.com/zzet/ansible-rbenv-role.git
     - src: https://github.com/goloxy/ansible-role-mysql
       version: origin/deveryware
 
@@ -18,12 +19,25 @@
     - name: Redmine servers - Installation
       hosts: sandbox-redmine*
       roles:
+      vars:
+        rbenv:
+          env: user
+          version: v1.0.0
+          default_ruby: 2.2.2
+          rubies:
+          - version: 2.2.2
+      roles:
+      - role: ansible-rbenv-role
+        rbenv_users:
+        - redmine
       - role: ansible-role-mysql
       - role: ansible-role-apache
         apache_packages:
         - apache2
         - apache2-utils
         - libapache2-mod-passenger
+        - passenger
+        - passenger-dev
         apache_remove_default_vhost: True
         apache_create_vhosts: False
       - role: ansible-role-redmine
@@ -31,6 +45,7 @@
         redmine_install: 'git'
         redmine_http_service: 'apache2-passenger'
         redmine_sub_uri: '/redmine'
+        redmine_ruby_env_init: '/bin/bash /etc/profile.d/rbenv.sh'
 
 ## License
 

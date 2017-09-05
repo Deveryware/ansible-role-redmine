@@ -1,41 +1,58 @@
 ---
-- name: Bundle - gem update --system
-  shell: "gem update --system"
+- block:
+  - name: Bundle - Ensure ruby env is setup if needed.
+    command: bash -lc "{{ redmine_ruby_env_init }}"
+    register: redmine_ruby_setup
+    when: redmine_ruby_env_init != ''
+    changed_when: redmine_ruby_setup.stdout != ''
 
-- name: Bundle - Ensure bundler is installed.
-  gem:
-    name: "bundler"
-    state: present
-    user_install: no
+  - name: Bundle - Ensure gems are updated.
+    command: bash -lc "gem update"
+    register: redmine_bundle_gem_update
+    changed_when: redmine_bundle_gem_update.stdout.find('Nothing\ to\ update') != -1
 
-- name: Bundle - Ensure bundler is updated.
-  shell: "bundle update"
-  args:
-    chdir: "{{ redmine_home }}"
+  - name: Bundle - Ensure bundler is installed.
+    gem:
+      name: "bundler"
+      state: present
 
-- name: Bundle - Ensure bundled gems are installed.
-  bundler:
-    state: present
-  args:
-    chdir: "{{ redmine_home }}"
+  - name: Bundle - Ensure Gemfile.lock is created.
+    stat:
+      path: "{{ redmine_home }}/Gemfile.lock"
+    register: redmine_gemfile_lock
 
-- name: Bundle - Ensure required gems are installed.
-  gem:
-    name: "activerecord-mysql2-adapter"
-    state: present
+  - name: Bundle - Ensure gems are updated.
+    command: bash -lc "bundle install --retry=3"
+    args:
+      chdir: "{{ redmine_home }}"
+    when: not redmine_gemfile_lock.stat.exists
 
-- name: Bundle - Generate secret token
-  shell: "bundle exec rake generate_secret_token"
-  args:
-    chdir: "{{ redmine_home }}"
+  - name: Bundle - Ensure required gems are installed.
+    command: bash -lc "gem list -i {{ item }} || gem install {{ item }}"
+    with_items:
+    - 'activerecord-mysql2-adapter'
+    register: redmine_gem_install
+    changed_when: redmine_gem_install.stdout != 'true'
 
-- name: Bundle - Migrate database
-  shell: "RAILS_ENV=production bundle exec rake db:migrate"
-  args:
-    chdir: "{{ redmine_home }}"
+  - name: Bundle - Generate secret token
+    command: bash -lc "bundle exec rake generate_secret_token"
+    args:
+      chdir: "{{ redmine_home }}"
+    register: redmine_bundle_token
+    changed_when: redmine_bundle_token.stdout != ''
 
-- name: Bundle - Default data
-  shell: "RAILS_ENV=production REDMINE_LANG=en bundle exec rake redmine:load_default_data"
-  args:
-    chdir: "{{ redmine_home }}"
-  when: redmine_load_default_data is defined and redmine_load_default_data
+  - name: Bundle - Migrate database
+    command: bash -lc "RAILS_ENV=production bundle exec rake db:migrate"
+    args:
+      chdir: "{{ redmine_home }}"
+    register: redmine_bundle_migrate
+    changed_when: redmine_bundle_migrate.stdout != ''
+
+  - name: Bundle - Default data
+    command: bash -lc "RAILS_ENV=production REDMINE_LANG=en bundle exec rake redmine:load_default_data"
+    args:
+      chdir: "{{ redmine_home }}"
+    when: redmine_load_default_data is defined and redmine_load_default_data
+
+  become: yes
+  become_user: "{{ redmine_user }}"

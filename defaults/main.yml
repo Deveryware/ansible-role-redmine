@@ -14,3 +14,5 @@ redmine_writable_dirs:
 - 'tmp'
 - 'files'
 - 'public/plugin_assets'
+
+redmine_ruby_env_init: ''
