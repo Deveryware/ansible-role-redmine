@@ -17,6 +17,7 @@
     name: "{{ redmine_user }}"
     group: "{{ redmine_group }}"
     home: "{{ redmine_home }}"
+    skeleton: True
     state: present
 
 - include: "{{ redmine_http_service }}.yml"
@@ -36,8 +37,9 @@
     recurse: yes
   with_items: "{{ redmine_writable_dirs }}"
 
-- name: Ensure redmine group is owner.
+- name: Ensure redmine ownership.
   file:
     path: "{{ redmine_home }}"
+    owner: "{{ redmine_user }}"
     group: "{{ redmine_group }}"
     recurse: yes

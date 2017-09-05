@@ -20,4 +20,11 @@
     src: database.yml.j2
     dest: "{{ redmine_install_dir }}/config/database.yml"
 
+- name: Ensure redmine ownership.
+  file:
+    path: "{{ redmine_install_dir }}"
+    owner: "{{ redmine_user }}"
+    group: "{{ redmine_group }}"
+    recurse: yes
+
 - include: 'bundle.yml'
