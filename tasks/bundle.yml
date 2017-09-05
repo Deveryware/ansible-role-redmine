@@ -16,16 +16,12 @@
       name: "bundler"
       state: present
 
-  - name: Bundle - Ensure Gemfile.lock is created.
-    stat:
-      path: "{{ redmine_home }}/Gemfile.lock"
-    register: redmine_gemfile_lock
-
   - name: Bundle - Ensure gems are updated.
     command: bash -lc "bundle install --retry=3"
     args:
       chdir: "{{ redmine_home }}"
-    when: not redmine_gemfile_lock.stat.exists
+    register: redmine_bundle_install
+    changed_when: redmine_bundle_install.stdout.find('Installing') != -1
 
   - name: Bundle - Ensure required gems are installed.
     command: bash -lc "gem list -i {{ item }} || gem install {{ item }}"
