@@ -27,4 +27,4 @@
     group: "{{ redmine_group }}"
     recurse: yes
 
-- include: 'bundle.yml'
+- include_tasks: 'bundle.yml'

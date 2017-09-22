@@ -2,10 +2,10 @@
 - include_vars: "{{ redmine_sgbd }}.yml"
   no_log: True
 
-- include: "{{ redmine_sgbd }}.yml"
+- include_tasks: "{{ redmine_sgbd }}.yml"
   when: redmine_sgbd != 'sqlite3'
 
-- include: "{{ redmine_install }}.yml"
+- include_tasks: "{{ redmine_install }}.yml"
 
 - name: Ensure redmine group is present.
   group:
@@ -20,7 +20,7 @@
     skeleton: True
     state: present
 
-- include: "{{ redmine_http_service }}.yml"
+- include_tasks: "{{ redmine_http_service }}.yml"
   when: redmine_http_service is defined
 
 - name: Ensure log directory is linked.
