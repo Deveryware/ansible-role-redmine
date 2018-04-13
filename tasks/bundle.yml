@@ -12,9 +12,11 @@
     changed_when: redmine_bundle_gem_update.stdout.find('Nothing\ to\ update') != -1
 
   - name: Bundle - Ensure bundler is installed.
-    gem:
-      name: "bundler"
-      state: present
+    command: bash -lc "gem install bundler"
+    args:
+      chdir: "{{ redmine_home }}"
+    register: redmine_bundler_install
+    changed_when: redmine_bundler_install.stdout.find('Installing') != -1
 
   - name: Bundle - Ensure gems are updated.
     command: bash -lc "bundle install --retry=3"
