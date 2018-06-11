@@ -1,5 +1,6 @@
 ---
-- include_vars: "{{ redmine_sgbd }}.yml"
+- name: Ensure {{ redmine_sgbd }} variables are included.
+  include_vars: "{{ redmine_sgbd }}.yml"
   no_log: True
 
 - include_tasks: "{{ redmine_sgbd }}.yml"
