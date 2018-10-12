@@ -9,6 +9,7 @@ redmine_git_packages:
 - make
 - libmagickcore-dev
 - libmagickwand-dev
+- imagemagick
 
 redmine_db_adapter: 'sqlite3'
 redmine_db_database: '/var/lib/dbconfig-common/sqlite3/redmine/instances/default/redmine_default'

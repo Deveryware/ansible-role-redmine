@@ -11,6 +11,7 @@ redmine_git_packages:
 - libmysqlclient-dev
 - libmagickcore-dev
 - libmagickwand-dev
+- imagemagick
 
 redmine_db_adapter: 'mysql2'
 redmine_db_database: 'redmine'
