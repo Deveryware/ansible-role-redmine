@@ -13,6 +13,13 @@ default:
   # See the examples below and the Rails guide for more configuration options:
   # http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
   email_delivery:
+{% if redmine_email_delivery_method is defined %}
+    delivery_method: {{ redmine_email_delivery_method }}
+    smtp_settings:
+{% for setting in redmine_email_smtp_settings -%}
+{{ setting | indent(width=8, first=True) }}
+{% endfor -%}
+{% endif -%}
 
   # ==== Simple SMTP server at localhost
   #
