@@ -47,6 +47,16 @@
         redmine_sub_uri: '/redmine'
         redmine_ruby_env_init: '/bin/bash /etc/profile.d/rbenv.sh'
 
+### email_delivery
+
+```
+    redmine_email_delivery_method: :smtp
+    redmine_email_smtp_settings:
+      - address: smtp.company.eu
+      - domain: company.eu
+      - port: 25
+```
+
 ## License
 
 MIT

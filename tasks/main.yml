@@ -38,6 +38,11 @@
     recurse: yes
   with_items: "{{ redmine_writable_dirs }}"
 
+- name: Ensure configuration file is present.
+  template:
+    src: "configuration.yml.j2"
+    dest: "{{ redmine_home }}/config/configuration.yml"
+
 - name: Ensure redmine ownership.
   file:
     path: "{{ redmine_home }}"
