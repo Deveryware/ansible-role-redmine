@@ -1,9 +1,8 @@
 ---
 - name: Git - Ensure prerequisites packages are installed.
   apt:
-    package: "{{ item }}"
+    package: "{{ redmine_git_packages }}"
     state: present
-  with_items: "{{ redmine_git_packages }}"
 
 - name: Git - Is this your first time?
   stat:
