@@ -26,4 +26,4 @@
   user:
     name: "{{ redmine_webserver_user }}"
     groups: "{{ redmine_group }}"
-  when: not redmine_webserver_user in getent_group['{{ redmine_group }}'][2]
+  when: not redmine_webserver_user in getent_group[redmine_group][2]
