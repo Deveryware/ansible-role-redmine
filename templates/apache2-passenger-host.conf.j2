@@ -6,7 +6,6 @@
 {% endif %}
     # ServerName my.domain.name
     # this is the passenger config
-    RailsEnv production
     SetEnv X_DEBIAN_SITEID "default"
     # CHANGE PassengerAppGroupName FOR OTHER INSTANCES
     PassengerAppGroupName redmine_default
@@ -16,13 +15,15 @@
 {% if redmine_sub_uri is defined %}
     Alias "{{ redmine_sub_uri }}" /usr/share/redmine/public
     <Location {{ redmine_sub_uri }}>
+        RailsEnv production
+        RackBaseURI {{ redmine_sub_uri }}
+        Options -MultiViews
         PassengerBaseURI {{ redmine_sub_uri }}
         PassengerAppRoot /usr/share/redmine
     </Location>
 {% endif %}
     <Directory "/usr/share/redmine/public">
         Allow from all
-        Options -MultiViews
         Require all granted
     </Directory>
 </VirtualHost>
