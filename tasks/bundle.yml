@@ -29,6 +29,7 @@
     command: bash -lc "gem list -i {{ item }} || gem install {{ item }}"
     with_items:
     - 'activerecord-mysql2-adapter'
+    - 'rdoc'
     register: redmine_gem_install
     changed_when: redmine_gem_install.stdout != 'true'
 
