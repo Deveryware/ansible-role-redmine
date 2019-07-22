@@ -9,7 +9,7 @@
     SetEnv X_DEBIAN_SITEID "default"
     # CHANGE PassengerAppGroupName FOR OTHER INSTANCES
     PassengerAppGroupName redmine_default
-    PassengerDefaultUser www-data
+    PassengerUser www-data
     Alias "/plugin_assets/" /var/cache/redmine/default/plugin_assets/
     DocumentRoot /usr/share/redmine/public
 {% if redmine_sub_uri is defined %}
