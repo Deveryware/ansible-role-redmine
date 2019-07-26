@@ -35,3 +35,11 @@
     line: "  PassengerDisableAnonymousTelemetry on"
     insertbefore: '</IfModule>'
     state: present
+
+- name: Apache2-passenger - Ensure passenger security check is disabled.
+  lineinfile:
+    dest: '/etc/apache2/mods-enabled/passenger.conf'
+    regexp: 'PassengerDisableSecurityUpdateCheck'
+    line: "  PassengerDisableSecurityUpdateCheck on" 
+    insertbefore: '</IfModule>'
+    state: present
