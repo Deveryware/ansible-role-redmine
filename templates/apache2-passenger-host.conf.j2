@@ -13,18 +13,18 @@
     PassengerAppGroupName redmine_default
     PassengerUser {{ redmine_user }}
     Alias "/plugin_assets/" /var/cache/redmine/default/plugin_assets/
-    DocumentRoot /usr/share/redmine/public
+    DocumentRoot {{ redmine_home }}/public
 {% if redmine_sub_uri is defined %}
-    Alias "{{ redmine_sub_uri }}" /usr/share/redmine/public
+    Alias "{{ redmine_sub_uri }}" {{ redmine_home }}/public
     <Location {{ redmine_sub_uri }}>
         RailsEnv production
         RackBaseURI {{ redmine_sub_uri }}
         Options -MultiViews
         PassengerBaseURI {{ redmine_sub_uri }}
-        PassengerAppRoot /usr/share/redmine
+        PassengerAppRoot {{ redmine_home }}
     </Location>
 {% endif %}
-    <Directory "/usr/share/redmine/public">
+    <Directory "{{ redmine_home }}/public">
         Allow from all
         Require all granted
     </Directory>
