@@ -22,10 +22,10 @@
       vars:
         rbenv:
           env: user
-          version: v1.0.0
-          default_ruby: 2.2.2
+          version: v1.1.2
+          default_ruby: 2.6.3
           rubies:
-          - version: 2.2.2
+          - version: 2.6.3
       roles:
       - role: ansible-rbenv-role
         rbenv_users:
@@ -34,12 +34,18 @@
       - role: ansible-role-apache
         apache_packages:
         - apache2
+        - apache2-dev
         - apache2-utils
         - libapache2-mod-passenger
+        - libapache2-mpm-itk
         - passenger
         - passenger-dev
+        - w3m
         apache_remove_default_vhost: True
         apache_create_vhosts: False
+        apache_mods_enabled:
+        - passenger.conf
+        - passenger.load
       - role: ansible-role-redmine
         redmine_sgbd: 'mysql'
         redmine_install: 'git'
