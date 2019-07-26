@@ -11,7 +11,7 @@
     SetEnv PASSENGER_COMPILE_NATIVE_SUPPORT_BINARY 0
     # CHANGE PassengerAppGroupName FOR OTHER INSTANCES
     PassengerAppGroupName redmine_default
-    PassengerUser www-data
+    PassengerUser {{ redmine_user }}
     Alias "/plugin_assets/" /var/cache/redmine/default/plugin_assets/
     DocumentRoot /usr/share/redmine/public
 {% if redmine_sub_uri is defined %}
