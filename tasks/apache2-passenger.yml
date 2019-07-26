@@ -27,3 +27,11 @@
     name: "{{ redmine_webserver_user }}"
     groups: "{{ redmine_group }}"
   when: not redmine_webserver_user in getent_group[redmine_group][2]
+
+- name: Apache2-passenger - Ensure passenger anonymous telemetry is disabled.
+  lineinfile:
+    dest: '/etc/apache2/mods-enabled/passenger.conf'
+    regexp: 'PassengerDisableAnonymousTelemetry '
+    line: "  PassengerDisableAnonymousTelemetry on"
+    insertbefore: '</IfModule>'
+    state: present
