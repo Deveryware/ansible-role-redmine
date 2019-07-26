@@ -52,6 +52,7 @@
         redmine_http_service: 'apache2-passenger'
         redmine_sub_uri: '/redmine'
         redmine_ruby_env_init: '/bin/bash /etc/profile.d/rbenv.sh'
+        redmine_ruby_path: '"/usr/share/redmine/.rbenv/shims/ruby'
 
 ### email_delivery
 
