@@ -15,7 +15,6 @@
 {% if redmine_ruby_path is defined %}
     PassengerRuby {{ redmine_ruby_path }}
 {% endif %}
-    Alias "/plugin_assets/" /var/cache/redmine/default/plugin_assets/
     DocumentRoot {{ redmine_home }}/public
 {% if redmine_sub_uri is defined %}
     Alias "{{ redmine_sub_uri }}" {{ redmine_home }}/public
