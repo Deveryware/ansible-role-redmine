@@ -22,12 +22,13 @@
         RailsEnv production
         RackBaseURI {{ redmine_sub_uri }}
         RailsBaseURI {{ redmine_sub_uri }}
-        Options -MultiViews
         PassengerBaseURI {{ redmine_sub_uri }}
         PassengerAppRoot {{ redmine_home }}
     </Location>
 {% endif %}
     <Directory "{{ redmine_home }}/public">
+        Options Indexes FollowSymLinks MultiViews
+        Order allow,deny
         Allow from all
         Require all granted
     </Directory>
