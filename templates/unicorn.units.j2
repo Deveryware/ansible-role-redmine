@@ -1,0 +1,18 @@
+[Unit]
+Description=Unicorn serving redmine
+After=syslog.target
+
+[Service]
+Restart=always
+RestartSec=10
+Type=forking
+WorkingDirectory={{ redmine_home }}
+SyslogIdentifier=unicorn-redmine
+PIDFile={{ unicorn_pid | default(omit)}}
+KillMode=mixed
+KillSignal=SIGQUIT
+User=redmine
+ExecStart={{ redmine_home }}/.rbenv/shims/unicorn -c {{ redmine_home }}/config/unicorn.rb -D -E production
+
+[Install]
+WantedBy=multi-user.target

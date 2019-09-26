@@ -38,6 +38,17 @@
     recurse: yes
   with_items: "{{ redmine_writable_dirs }}"
 
+- name: Ensure redmine tmp directory is populated
+  file:
+    path: "{{ item }}"
+    owner: "{{ redmine_user }}"
+    group: "{{ redmine_group }}"
+    recurse: yes
+    state: directory
+  loop:
+  - "{{ redmine_home }}/tmp/sockets"
+  - "{{ redmine_home }}/tmp/pids"
+
 - name: Ensure configuration file is present.
   template:
     src: "configuration.yml.j2"

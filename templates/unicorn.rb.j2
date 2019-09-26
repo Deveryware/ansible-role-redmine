@@ -1,0 +1,40 @@
+{% for listen in unicorn_listens -%}
+listen "{{ listen }}", :backlog => 1024
+{% endfor -%}
+{% if unicorn_working_directory is defined %}
+working_directory "{{ unicorn_working_directory }}"
+{% endif %}
+{% if unicorn_timeout is defined %}
+timeout {{ unicorn_timeout }}
+{% endif %}
+{% if unicorn_preload_app is defined %}
+preload_app {{ unicorn_preload_app | lower }}
+{% endif %}
+{% if unicorn_worker_processes is defined %}
+worker_processes {{ unicorn_worker_processes }}
+{% endif %}
+{% if unicorn_run_once is defined %}
+run_once = {{ unicorn_run_once | lower }}
+{% endif %}
+before_fork do |server, worker|
+  if run_once
+    run_once = false
+  end
+  old_pid = "#{server.config[:pid]}.oldbin"
+  if old_pid != server.pid
+    begin
+      sig = (worker.nr + 1) >= server.worker_processes ? :QUIT : :TTOU
+      Process.kill(sig, File.read(old_pid).to_i)
+    rescue Errno::ENOENT, Errno::ESRCH
+    end
+  end
+end
+{% if unicorn_pid is defined %}
+pid "{{ unicorn_pid }}"
+{% endif %}
+{% if unicorn_stderr_path is defined %}
+stderr_path "{{ unicorn_stderr_path }}"
+{% endif %}
+{% if unicorn_stdout_path is defined %}
+stdout_path "{{ unicorn_stdout_path }}"
+{% endif %}
