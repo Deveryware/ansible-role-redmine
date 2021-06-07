@@ -6,11 +6,6 @@
     when: redmine_ruby_env_init != ''
     changed_when: redmine_ruby_setup.stdout != ''
 
-  - name: Bundle - Ensure gems are updated.
-    command: bash -lc "gem update"
-    register: redmine_bundle_gem_update
-    changed_when: redmine_bundle_gem_update.stdout.find('Nothing\ to\ update') != -1
-
   - name: Bundle - Ensure bundler is installed.
     command: bash -lc "gem install bundler"
     args:
@@ -18,7 +13,7 @@
     register: redmine_bundler_install
     changed_when: redmine_bundler_install.stdout.find('Installing') != -1
 
-  - name: Bundle - Ensure gems are updated.
+  - name: Bundle - Install required gems.
     command: bash -lc "bundle install --retry=3"
     args:
       chdir: "{{ redmine_home }}"
