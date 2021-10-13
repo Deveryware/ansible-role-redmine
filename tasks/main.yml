@@ -60,3 +60,8 @@
     owner: "{{ redmine_user }}"
     group: "{{ redmine_group }}"
     recurse: yes
+
+- name: Ensure delete.me file is absent.
+  file:
+    path: "{{ redmine_install_dir }}/files/delete.me"
+    state: absent
