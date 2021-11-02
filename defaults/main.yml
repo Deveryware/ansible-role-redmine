@@ -16,3 +16,6 @@ redmine_writable_dirs:
 - 'public/plugin_assets'
 
 redmine_ruby_env_init: ''
+
+redmine_mysql_login_host: localhost
+redmine_mysql_login_unix_socket: "/var/run/mysqld/mysqld.sock"
