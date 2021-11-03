@@ -1,15 +1,25 @@
 ---
 - name: Mysql - Ensure database is created.
-  mysql_db:
+  community.mysql.mysql_db:
     name: "{{ redmine_db_database }}"
-    encoding: utf8
-    collation: utf8_general_ci
+    encoding: 'utf8'
+    collation: 'utf8_general_ci'
+    login_host: "{{ redmine_mysql_login_host | default(omit) }}"
+    login_user: "{{ redmine_mysql_login_user | default(omit) }}"
+    login_password: "{{ redmine_mysql_login_password | default(omit) }}"
+    login_port: "{{ redmine_mysql_login_port | default(omit) }}"
+    login_unix_socket: "{{ redmine_mysql_login_unix_socket | default(omit) }}"
     state: present
   register: db_created
 
 - name: Mysql - Ensure redmine db user is present.
-  mysql_user:
+  community.mysql.mysql_user:
     name: "{{ redmine_db_username }}"
     password: "{{ redmine_db_password }}"
     priv: "{{ redmine_db_username }}.*:ALL"
+    login_host: "{{ redmine_mysql_login_host | default(omit) }}"
+    login_user: "{{ redmine_mysql_login_user | default(omit) }}"
+    login_password: "{{ redmine_mysql_login_password | default(omit) }}"
+    login_port: "{{ redmine_mysql_login_port | default(omit) }}"
+    login_unix_socket: "{{ redmine_mysql_login_unix_socket | default(omit) }}"
     state: present

@@ -53,6 +53,8 @@
         redmine_sub_uri: '/redmine'
         redmine_ruby_env_init: '/bin/bash /etc/profile.d/rbenv.sh'
         redmine_ruby_path: '"/usr/share/redmine/.rbenv/shims/ruby'
+        redmine_mysql_login_user: 'root'
+        redmine_mysql_login_password: 'Oloc4Ever'
 
 ### email_delivery
 
