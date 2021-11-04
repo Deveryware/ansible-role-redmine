@@ -1,5 +1,5 @@
 ---
-- name: Install unicorn as gem
+- name: Unicorn - Install unicorn as gem.
   gem:
     name: unicorn
     version: 5.4.1
@@ -8,13 +8,20 @@
     install_dir: "{{ redmine_home }}/.rbenv/versions/{{ unicorn_ruby_version }}/lib/ruby/gems/2.6.0/"
   become_user: "{{ redmine_user }}"
 
-- name: Install unicorn's configuration file
+- name: Unicorn - Install unicorn's configuration file.
   template:
     src: unicorn.rb.j2
     dest: "{{ redmine_home }}/config/unicorn.rb"
     owner: "{{ redmine_user }}"
 
-- name: Install unicorn's systemd unit
+- name: Unicorn - Ensure redmine ownership.
+  file:
+    path: "{{ redmine_home }}"
+    owner: "{{ redmine_user }}"
+    group: "{{ redmine_group }}"
+    recurse: yes
+
+- name: Unicorn - Install unicorn's systemd unit.
   template:
     src: unicorn.units.j2
     dest: "/lib/systemd/system/unicorn@redmine.service"
@@ -22,7 +29,7 @@
     group: root
   notify: Reload systemd
 
-- name: Ensure unicorn is enabled
+- name: Unicorn - Ensure unicorn is enabled.
   service:
     name: "unicorn@redmine"
     enabled: yes
