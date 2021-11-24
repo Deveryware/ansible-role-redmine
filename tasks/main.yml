@@ -18,7 +18,7 @@
     name: "{{ redmine_user }}"
     group: "{{ redmine_group }}"
     home: "{{ redmine_home }}"
-    skeleton: True
+    skeleton: 'True'
     state: present
 
 - include_tasks: "{{ redmine_http_service }}.yml"
