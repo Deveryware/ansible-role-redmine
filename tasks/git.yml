@@ -20,6 +20,7 @@
   register: redmine_git_result
   changed_when: "redmine_git_result.after|default('after') != redmine_git_result.before|default('before')"
   when: redmine_first_pass.stat.exists == false
+  become_user: "{{ redmine_user }}"
 
 - name: Git - Convert bare repository.
   lineinfile:
@@ -36,11 +37,14 @@
     accept_hostkey: yes
   register: redmine_git_result
   changed_when: "redmine_git_result.after|default('after') != redmine_git_result.before|default('before')"
+  become_user: "{{ redmine_user }}"
 
 - name: Git - Ensure database.yml is set.
   template:
     src: database.yml.j2
     dest: "{{ redmine_install_dir }}/config/database.yml"
+    owner: "{{ redmine_user }}"
+    group: "{{ redmine_group }}"
 
 - name: Ensure redmine ownership.
   file:
