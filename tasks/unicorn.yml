@@ -13,13 +13,7 @@
     src: unicorn.rb.j2
     dest: "{{ redmine_home }}/config/unicorn.rb"
     owner: "{{ redmine_user }}"
-
-- name: Unicorn - Ensure redmine ownership.
-  file:
-    path: "{{ redmine_home }}"
-    owner: "{{ redmine_user }}"
     group: "{{ redmine_group }}"
-    recurse: yes
 
 - name: Unicorn - Install unicorn's systemd unit.
   template:
