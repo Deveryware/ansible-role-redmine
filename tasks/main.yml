@@ -21,9 +21,6 @@
     skeleton: 'True'
     state: present
 
-- include_tasks: "{{ redmine_http_service }}.yml"
-  when: redmine_http_service is defined
-
 - name: Ensure log directory is linked.
   file:
     src: "/usr/share/redmine/log"
@@ -65,3 +62,8 @@
   file:
     path: "{{ redmine_install_dir }}/files/delete.me"
     state: absent
+
+- include_tasks: "{{ redmine_http_service }}.yml"
+  when: redmine_http_service is defined
+
+
