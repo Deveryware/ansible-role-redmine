@@ -2,13 +2,13 @@
 redmine_apt_packages:
 - redmine
 - redmine-mysql
-- libmysqlclient-dev
+- default-libmysqlclient-dev
 
 redmine_git_packages:
 - git
 - ruby-dev
 - make
-- libmysqlclient-dev
+- default-libmysqlclient-dev
 - libmagickcore-dev
 - libmagickwand-dev
 - imagemagick
