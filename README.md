@@ -57,7 +57,7 @@
         redmine_mysql_login_password: 'Oloc4Ever'
         redmine_bundler_version: '2.4.22'
 
-If redmine_bundler_version is not set, last version available will be installed, or current version will be keeped if already installed.
+If redmine_bundler_version is not set, last version available will be installed, or current version will be kept if already installed.
 
 ### email_delivery
 
