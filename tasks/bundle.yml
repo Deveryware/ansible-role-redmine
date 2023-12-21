@@ -6,8 +6,15 @@
     when: redmine_ruby_env_init != ''
     changed_when: redmine_ruby_setup.stdout != ''
 
+  - name: Bundle - Ensure bundler is updated.
+    command: bash -lc "gem update --system {{ redmine_gem_version }}"
+    args:
+      chdir: "{{ redmine_home }}"
+    register: redmine_bundler_update
+    changed_when: redmine_bundler_update.stdout != "Latest version already installed. Done."
+
   - name: Bundle - Ensure bundler is installed.
-    command: bash -lc "gem install bundler"
+    command: bash -lc "gem install bundler {% if redmine_bundler_version and redmine_bundler_version != "" %}-v {{ redmine_bundler_version }}{% endif %}"
     args:
       chdir: "{{ redmine_home }}"
     register: redmine_bundler_install
