@@ -2,10 +2,10 @@
 - name: Unicorn - Install unicorn as gem.
   gem:
     name: unicorn
-    version: 5.4.1
+    version:  "{{ unicorn_version }}"
     executable: "{{ redmine_home }}/.rbenv/shims/gem"
     user_install: no
-    install_dir: "{{ redmine_home }}/.rbenv/versions/{{ unicorn_ruby_version }}/lib/ruby/gems/2.6.0/"
+    install_dir: "{{ redmine_home }}/.rbenv/versions/{{ unicorn_ruby_version }}/lib/ruby/gems/{{ unicorn_ruby_version }}/"
   become_user: "{{ redmine_user }}"
 
 - name: Unicorn - Install unicorn's configuration file.
